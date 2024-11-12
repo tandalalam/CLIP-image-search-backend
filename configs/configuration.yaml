@@ -1,0 +1,11 @@
+qdrant_configs:
+  db_url: ${QDRANT_URL}
+  db_api_key: ${QDRANT_API_KEY}
+  product_collection: ${PRODUCTS_COLLECTION}
+insertion_job_configs:
+  insertion_batch_size: 5
+  path_to_products: 'data/products.json'
+server_configs:
+  port: 8080
+  num_workers: 5
+
