@@ -4,3 +4,12 @@ requests
 pillow
 torch
 qdrant_client
+pydantic_core
+loguru
+pydantic
+PyYAML
+python-dotenv
+Flask
+httpx
+tqdm
+retry

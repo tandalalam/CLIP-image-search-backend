@@ -19,28 +19,28 @@ class Product(BaseModel):
 
     images: List[str]
 
-    brand_id: Optional[int] = Field(..., ge=0)
-    brand_name: Optional[str] = Field(..., min_length=1, max_length=200)
+    brand_id: int | None = Field(None, ge=0)
+    brand_name: str | None = Field(None, min_length=1, max_length=200)
 
     code: str = Field(..., min_length=1, max_length=200)
 
-    category_id: Optional[int] = Field(..., ge=0)
-    category_name: Optional[str] = Field(..., min_length=1, max_length=200)
+    category_id: int | None = Field(None, ge=0)
+    category_name: str | None = Field(None, min_length=1, max_length=200)
 
-    gender_id: Optional[int] = Field(..., ge=0)
-    gender_name: Optional[str] = Field(..., min_length=1, max_length=200)
+    gender_id: int | None = Field(None, ge=0)
+    gender_name: str | None = Field(None, min_length=1, max_length=200)
 
-    shop_id: Optional[int] = Field(..., ge=0)
-    shop_name: Optional[str] = Field(..., min_length=1, max_length=200)
+    shop_id: int | None = Field(None, ge=0)
+    shop_name: str | None = Field(None, min_length=1, max_length=200)
 
     link: str = Field(..., min_length=1, max_length=200)
 
-    status: Optional[str] = Field(..., min_length=1, max_length=200)
+    status: str | None = Field(None, min_length=1, max_length=200)
 
-    colors: Optional[List[str]] = Field(..., min_length=0, max_length=200)
-    sizes: Optional[List[str]] = Field(..., min_length=0, max_length=200)
+    colors: Optional[List[str]] = Field([], min_length=0, max_length=200)
+    sizes: Optional[List[str]] = Field([], min_length=0, max_length=200)
 
-    region: Optional[str] = Field(..., min_length=1, max_length=200)
+    region: Optional[str] = Field(None, min_length=1, max_length=200)
 
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
@@ -61,6 +61,16 @@ class Product(BaseModel):
             if not re.match(r'#[0-9A-F]{5}', color.upper()):
                 raise ValueError(f'Invalid color: {color}')
         return [color.upper() for color in v]
+
+    def to_response_obj(self):
+        return {
+            'id': self.uuid,
+            'name': self.name,
+            'price': self.current_price,
+            'currency': self.currency,
+            'link': self.link,
+            'images': self.images,
+        }
 
     def to_vector_record(self, embedding: List[float]) -> Dict[str, Any]:
         """Convert product to vector record format"""

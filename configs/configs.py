@@ -2,7 +2,7 @@ import yaml
 from os import environ
 import re
 from dotenv import load_dotenv
-
+from loguru import logger
 
 def load_yaml_file(path):
     with open(path, 'r') as stream:
@@ -49,4 +49,8 @@ class ConfigManager:
             self.configs = yaml.load(stream, Loader=yaml.FullLoader)
 
     def get_prop(self, key):
-        return self.configs[key]
+        try:
+            return self.configs[key]
+        except KeyError:
+            logger.error(f'Config key {key} not found')
+            return None

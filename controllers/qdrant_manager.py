@@ -1,13 +1,8 @@
-import os
-from typing import List, Tuple
-
-import httpx
+from typing import List, Tuple, Dict
 from qdrant_client import QdrantClient, models
 from qdrant_client.http import exceptions
-from tqdm import tqdm
 from utils.clip_encoder import CLIPEncoder
 from models.product import Product
-from retry import retry
 from loguru import logger
 
 
@@ -71,10 +66,15 @@ class QdrantManager:
             points=[models.PointStruct(**vector_record)],
         )
 
-    def search_products_by_text(self, text: str, top_k: int = 10) -> List[Tuple[Product, float]]:
+    def search_products_by_text(self,
+                                text: str,
+                                top_k: int = 10,
+                                query_filter: models.Filter | None = None) -> List[Dict]:
+
         text_embedding = self.clip_encoder.encode_text(text)
         search_result = self.client.search(
             collection_name=self.collection_name,
+            query_filter=query_filter,
             query_vector=text_embedding,
             limit=top_k,
         )
@@ -82,6 +82,6 @@ class QdrantManager:
         results = []
         for point in search_result:
             product = Product(**point.payload)
-            results.append((product, point.score))
+            results.append({'product': product, 'similarity_score': point.score})
 
         return results
