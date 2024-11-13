@@ -2,6 +2,12 @@ qdrant_configs:
   db_url: ${QDRANT_URL}
   db_api_key: ${QDRANT_API_KEY}
   product_collection: ${PRODUCTS_COLLECTION}
+  text_index_configs:
+    field_name: name
+    tokenizer: word
+    min_token_len: 2
+    max_token_len: 15
+    lowercase: true
 insertion_job_configs:
   insertion_batch_size: 5
   path_to_products: 'data/products.json'

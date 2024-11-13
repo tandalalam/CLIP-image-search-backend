@@ -10,17 +10,17 @@ class QdrantManager:
     qdrant_manager = None
 
     @staticmethod
-    def get_qdrant_manager(url, api_key, collection_name):
+    def get_qdrant_manager(url, api_key, collection_name, text_index_name=None):
         if QdrantManager.qdrant_manager is None:
-            QdrantManager.qdrant_manager = QdrantManager(url, api_key, collection_name)
+            QdrantManager.qdrant_manager = QdrantManager(url, api_key, collection_name, text_index_name)
         return QdrantManager.qdrant_manager
 
-    def __init__(self, url: str, api_key: str, collection_name: str):
+    def __init__(self, url: str, api_key: str, collection_name: str, text_index_name: str | None = None):
         self.client = QdrantClient(url=url,
                                    api_key=api_key)
         self.collection_name = collection_name
         self.clip_encoder = CLIPEncoder()
-
+        self.text_index_name = text_index_name
         # Create collection if it doesn't exist
         self.__ensure_collection()
 
@@ -36,6 +36,22 @@ class QdrantManager:
                         distance=models.Distance.COSINE,
                     )
                 )
+
+    def index_keywords(self, field_name: str, params: Dict):
+        try:
+            self.client.create_payload_index(
+                collection_name=self.collection_name,
+                field_name=field_name,
+                field_schema=models.TextIndexParams(
+                    type="text",
+                    **params
+                ),
+            )
+            logger.info('Successfully indexed keywords.')
+
+        except exceptions.UnexpectedResponse as e:
+            logger.error(f'Error occurred, indexing {field_name}.')
+            logger.error(e)
 
     def insert_batch(self, products: List[Product], insertion_batch_size=64):
         for batch_start in range(0, len(products), insertion_batch_size):
@@ -83,5 +99,38 @@ class QdrantManager:
         for point in search_result:
             product = Product(**point.payload)
             results.append({'product': product, 'similarity_score': point.score})
+
+        return results
+
+    def search_products_by_keyword(self,
+                                   text: str,
+                                   top_k: int = 10,
+                                   query_filter: models.Filter | None = None) -> List[Dict]:
+
+        text_filter = models.FieldCondition(
+            key=self.text_index_name,
+            match=models.MatchText(text=text),
+        )
+
+        if query_filter is not None:
+            query_filter.must.append(text_filter)
+        else:
+            query_filter = models.Filter(
+                must=[text_filter],
+            )
+
+        search_result = self.client.scroll(
+            collection_name=self.collection_name,
+            scroll_filter=query_filter,
+            limit=top_k,
+            with_payload=True,
+            with_vectors=False,
+        )
+
+        results = []
+
+        for point in search_result[0]:
+            product = Product(**point.payload)
+            results.append({'product': product})
 
         return results

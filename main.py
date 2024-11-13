@@ -27,6 +27,19 @@ def index_products():
                                 insertion_batch_size=job_configs['insertion_batch_size'], )
 
 
+def create_full_text_index():
+    config_manager = ConfigManager.get_config_manager()
+    db_configs = config_manager.get_prop('qdrant_configs')
+
+    qdrant_manager = QdrantManager.get_qdrant_manager(url=db_configs['db_url'],
+                                                      api_key=db_configs['db_api_key'],
+                                                      collection_name=db_configs['product_collection'])
+
+    keyword_index_configs = db_configs.get('text_index_configs')
+    qdrant_manager.index_keywords(field_name=keyword_index_configs.pop('field_name'),
+                                  params=keyword_index_configs)
+
+
 def start_application():
     config_manager = ConfigManager.get_config_manager()
     qdrant_config = config_manager.get_prop('qdrant_configs')
@@ -37,7 +50,7 @@ def start_application():
 
     app.add_url_rule('/search',
                      'semantic_search',
-                     view_func=api_controller.semantic_search,
+                     view_func=api_controller.search,
                      methods=['GET'])
 
     return app, server_config
