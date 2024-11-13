@@ -11,8 +11,8 @@ qdrant_configs:
 insertion_job_configs:
   insertion_batch_size: 5
   path_to_products: 'data/products.json'
-semantic_search_configs:
-  top_k: 5
+hybrid_search_configs:
+  semantic_results_percent: 70
 server_configs:
   port: 8080
   num_workers: 5
