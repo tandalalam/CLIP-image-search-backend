@@ -44,9 +44,11 @@ def start_application():
     config_manager = ConfigManager.get_config_manager()
     qdrant_config = config_manager.get_prop('qdrant_configs')
     server_config = config_manager.get_prop('server_configs')
+    hybrid_search_configs = config_manager.get_prop('hybrid_search_configs')
 
     app = Flask(__name__)
-    api_controller = ApiController(qdrant_configs=qdrant_config)
+    api_controller = ApiController(qdrant_configs=qdrant_config,
+                                   hybrid_search_configs=hybrid_search_configs)
 
     app.add_url_rule('/search',
                      'semantic_search',
