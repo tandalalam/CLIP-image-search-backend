@@ -1,8 +1,8 @@
-from typing import List, Tuple, Dict
+from typing import List, Dict
 from qdrant_client import QdrantClient, models
 from qdrant_client.http import exceptions
-from utils.clip_encoder import CLIPEncoder
-from models.product import Product
+from src.utils.clip_encoder import CLIPEncoder
+from src.models.product import Product
 from loguru import logger
 
 
