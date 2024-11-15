@@ -26,7 +26,7 @@ class ApiController:
 
     def is_ready(self):
         self.qdrant_manager._ensure_collection()
-        return True, 200
+        return jsonify(True), 200
 
     def index(self):
         return 'Hi!'
