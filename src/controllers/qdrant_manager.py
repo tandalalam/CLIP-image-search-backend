@@ -1,8 +1,8 @@
 from typing import List, Dict
 from qdrant_client import QdrantClient, models
 from qdrant_client.http import exceptions
-from src.utils.clip_encoder import CLIPEncoder
-from src.models.product import Product
+from utils.clip_encoder import CLIPEncoder
+from models.product import Product
 from loguru import logger
 
 
@@ -54,7 +54,7 @@ class QdrantManager:
             logger.error(e)
 
     def insert_batch(self, products: List[Product], insertion_batch_size=64):
-        for batch_start in range(0, len(products), insertion_batch_size):
+        for batch_start in range(1410, len(products), insertion_batch_size):
             batch_end = batch_start + insertion_batch_size
 
             batch_points = []
@@ -62,10 +62,14 @@ class QdrantManager:
             logger.info(f'start encoding items [{batch_start}, {batch_end}])')
 
             for product in products[batch_start:batch_end]:
-                product_encoding = self.clip_encoder.encode_image(images=[image for image in product.images],
-                                                                  is_url=True)
-                vector_record = product.to_vector_record(product_encoding)
-                batch_points.append(models.PointStruct(**vector_record))
+                try:
+                    product_encoding = self.clip_encoder.encode_image(images=[image for image in product.images],
+                                                                      is_url=True)
+                    vector_record = product.to_vector_record(product_encoding)
+                    batch_points.append(models.PointStruct(**vector_record))
+                except ValueError as e:
+                    logger.error(f'error encoding images {[image for image in product.images]}')
+                    logger.error(e)
 
             logger.info(f'start inserting items [{batch_start}, {batch_end}])')
 

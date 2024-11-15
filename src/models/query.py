@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, Field, field_validator
 from enum import IntEnum
-from src.models.product import Product
+from models.product import Product
 from qdrant_client.client_base import models
 
 

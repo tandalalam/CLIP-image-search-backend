@@ -4,6 +4,7 @@ import re
 from dotenv import load_dotenv
 from loguru import logger
 
+
 def load_yaml_file(path):
     with open(path, 'r') as stream:
         return yaml.safe_load(stream)
@@ -39,7 +40,7 @@ class ConfigManager:
             ConfigManager.config_manager = ConfigManager()
         return ConfigManager.config_manager
 
-    def __init__(self, configuration_path='configs/configuration.yaml'):
+    def __init__(self, configuration_path='src/configs/configuration.yaml'):
         load_dotenv('.env')
 
         yaml.add_implicit_resolver('!path', path_matcher)

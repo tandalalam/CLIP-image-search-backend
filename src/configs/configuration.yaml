@@ -10,7 +10,7 @@ qdrant_configs:
     lowercase: true
 insertion_job_configs:
   insertion_batch_size: 5
-  path_to_products: 'data/products.json'
+  path_to_products: 'src/data/products.json'
 hybrid_search_configs:
   semantic_results_percent: 70
 server_configs:

@@ -2,11 +2,11 @@ from typing import List, Optional, Dict
 
 from pydantic import ValidationError
 
-from src.controllers.qdrant_manager import QdrantManager
+from controllers.qdrant_manager import QdrantManager
 from flask import request, jsonify
 
-from src.models.product import Product
-from src.models.query import Query, RetrievalType
+from models.product import Product
+from models.query import Query, RetrievalType
 
 
 class ApiController:

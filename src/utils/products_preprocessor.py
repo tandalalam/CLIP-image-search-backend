@@ -1,6 +1,6 @@
 from typing import List, Dict, Optional
 from pydantic_core._pydantic_core import ValidationError
-from src.models.product import Product
+from models.product import Product
 from loguru import logger
 
 

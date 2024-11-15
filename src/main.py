@@ -1,8 +1,8 @@
 import json
-from src.controllers.api_controller import ApiController
-from src.controllers.qdrant_manager import QdrantManager
-from src.configs.configs import ConfigManager
-from src.utils.products_preprocessor import ProductsPreprocessor
+from controllers.api_controller import ApiController
+from controllers.qdrant_manager import QdrantManager
+from configs.configs import ConfigManager
+from utils.products_preprocessor import ProductsPreprocessor
 from flask import Flask
 
 
