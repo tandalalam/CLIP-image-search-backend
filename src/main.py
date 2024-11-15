@@ -64,7 +64,7 @@ def start_application():
                      methods=['GET'])
 
     app.add_url_rule('/is_ready',
-                     'index',
+                     'is_ready',
                      view_func=api_controller.is_ready,
                      methods=['GET'])
 
