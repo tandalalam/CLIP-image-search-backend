@@ -1,4 +1,7 @@
 import json
+
+from loguru import logger
+
 from controllers.api_controller import ApiController
 from controllers.qdrant_manager import QdrantManager
 from configs.configs import ConfigManager
@@ -55,11 +58,27 @@ def start_application():
                      view_func=api_controller.search,
                      methods=['GET'])
 
+    app.add_url_rule('/index',
+                     'index',
+                     view_func=api_controller.index,
+                     methods=['GET'])
+
+    app.add_url_rule('/is_ready',
+                     'index',
+                     view_func=api_controller.is_ready,
+                     methods=['GET'])
+
     return app, server_config
 
 
 if __name__ == '__main__':
     app, server_configs = start_application()
-    app.run(debug=True,
-            host='0.0.0.0',
-            port=server_configs.get('port'))
+
+    port = ConfigManager.get_config_manager().get_prop('service_configs').get('port')
+    from waitress import serve
+
+    logger.info('Starting server...')
+
+    serve(app, host='0.0.0.0',
+          port=port,
+          threads=5)

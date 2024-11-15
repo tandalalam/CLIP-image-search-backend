@@ -24,6 +24,13 @@ class ApiController:
                                                                collection_name=qdrant_configs['product_collection'],
                                                                text_index_name=text_index_name)
 
+    def is_ready(self):
+        self.qdrant_manager._ensure_collection()
+        return True, 200
+
+    def index(self):
+        return 'Hi!'
+
     def search(self):
 
         try:

@@ -22,9 +22,9 @@ class QdrantManager:
         self.clip_encoder = CLIPEncoder()
         self.text_index_name = text_index_name
         # Create collection if it doesn't exist
-        self.__ensure_collection()
+        self._ensure_collection()
 
-    def __ensure_collection(self):
+    def _ensure_collection(self):
         try:
             self.client.get_collection(self.collection_name)
         except exceptions.UnexpectedResponse as e:

@@ -2,6 +2,7 @@ transformers
 numpy
 requests
 pillow
+waitress
 qdrant_client
 pydantic_core
 loguru
