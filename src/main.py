@@ -73,10 +73,11 @@ def start_application():
 
 if __name__ == '__main__':
     app, server_configs = start_application()
-    from waitress import serve
-
-    logger.info('Starting server...')
-
-    serve(app, host='0.0.0.0',
-          port=server_configs['port'],
-          threads=5)
+    app.run(host='0.0.0.0', port=server_configs['port'])
+    # from waitress import serve
+    #
+    # logger.info('Starting server...')
+    #
+    # serve(app, host='0.0.0.0',
+    #       port=server_configs['port'],
+    #       threads=2)

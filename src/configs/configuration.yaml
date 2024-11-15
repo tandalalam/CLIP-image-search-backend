@@ -1,7 +1,7 @@
 qdrant_configs:
   db_url: ${QDRANT_URL}
   db_api_key: ${QDRANT_API_KEY}
-  product_collection: ${PRODUCTS_COLLECTION}
+  product_collection: products
   text_index_configs:
     field_name: name
     tokenizer: word
