@@ -40,7 +40,7 @@ You can also run the project using Docker by simply `docker build -t clip-search
 
 ## Usage  
 
-Send a POST request with a text query to retrieve matching images:  
+Send a GET request with a text query to retrieve matching images:  
 ```bash
-curl -X POST -H "Content-Type: application/json" -d '{"query": "red shoes"}' http://localhost:8080/search  
+curl -X GET -H "Content-Type: application/json" -d '{"query": "red shoes"}' http://localhost:8080/search  
 ```  
