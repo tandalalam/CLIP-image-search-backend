@@ -1,7 +1,3 @@
-Here’s a concise version of the README:  
-
----
-
 # CLIP Image Search Backend  
 
 A backend for a search engine that uses the **CLIP model** and **Qdrant vector database** to match text queries with relevant images. Ideal for product discovery and cross-modal search applications.  
